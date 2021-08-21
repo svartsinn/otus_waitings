@@ -1,35 +1,23 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
+from page_object.PHPMyAdminPage import PHPMyAdminPage
 
 
 def test_panel_links(browser):
-    browser.get(browser.admin_url)
-    wait = WebDriverWait(browser, 10)
-    wait.until(EC.visibility_of_element_located((By.ID, 'navipanellinks')))
+    PHPMyAdminPage(browser).verify_panel_element()
 
 
 def test_top_menu_container(browser):
-    browser.get(browser.admin_url)
-    wait = WebDriverWait(browser, 10)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.menucontainer')))
+    PHPMyAdminPage(browser).verify_menu_element()
 
 
-def test_lang_settings(browser):
-    browser.get(browser.admin_url)
-    wait = WebDriverWait(browser, 10)
-    dropdown = Select(wait.until(EC.visibility_of_element_located((By.ID, 'sel-lang'))))
-    assert len(dropdown.options) == 44
+def test_count_lang_dropdown_list(browser):
+    dropdown_list = PHPMyAdminPage(browser).count_dropdown_list()
+    assert dropdown_list == 44
 
 
 def test_drop_list(browser):
-    browser.get(browser.admin_url)
-    el = browser.find_elements_by_css_selector('.drop_list')
-    assert len(el) == 2
+    drop_list = PHPMyAdminPage(browser).count_elements()
+    assert drop_list == 2
 
 
 def test_doc_container(browser):
-    browser.get(browser.admin_url)
-    wait = WebDriverWait(browser, 10)
-    wait.until(EC.visibility_of_element_located((By.ID, 'maincontainer')))
+    PHPMyAdminPage(browser).verify_doc_element()

@@ -1,39 +1,32 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from page_object.ProductPage import ProductPage
+from page_object.elements.SearchElement import SearchElement
 
 
 def test_breadcrumb(browser):
-    browser.get(browser.url + '/macbook')
-    wait = WebDriverWait(browser, 10)
-    el = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.breadcrumb')))
-    wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.breadcrumb'), 'MacBook'))
-    assert el.text == 'MacBook'
+    product = ProductPage(browser)
+    product.verify_breadcrumb_element()
+    text = product.get_breadcrumb_text()
+    assert text == 'MacBook', 'Text message not equal to expected'
 
 
 def test_add_to_card(browser):
-    browser.get(browser.url + '/macbook')
-    wait = WebDriverWait(browser, 10)
-    wait.until(EC.visibility_of_element_located((By.ID, 'button-cart'))).click()
-    el = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.alert-success')))
-    wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.alert-success'), 'Success: You have added'))
-    assert 'Success: You have added MacBook to your shopping cart!' in el.text
+    product = ProductPage(browser)
+    product.click_button_card_element()
+    text = product.get_alert_text()
+    assert 'Success: You have added MacBook to your shopping cart!' in text, \
+        'Text message not equal to expected'
 
 
 def test_card_total(browser):
-    browser.get(browser.url + '/macbook')
-    wait = WebDriverWait(browser, 5)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#cart > button')))
+    ProductPage(browser).verify_card_total_element()
 
 
-def test_search_btn(browser):
-    browser.get(browser.url + '/macbook')
-    wait = WebDriverWait(browser, 5)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn-default'))).click()
-    assert browser.current_url == browser.url + '/index.php?route=product/search'
+def test_url_after_click_search_button(browser):
+    search = SearchElement(browser)
+    search.click_on_search_button()
+    url = search.get_current_url()
+    assert '/index.php?route=product/search' in url, 'Current URL not equal to expected'
 
 
 def test_description_block(browser):
-    browser.get(browser.url + '/macbook')
-    wait = WebDriverWait(browser, 5)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.tab-content')))
+    ProductPage(browser).verify_description_element()

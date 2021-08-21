@@ -1,37 +1,30 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from page_object.elements.BasketElement import BasketElement
+from page_object.elements.FooterElement import FooterElement
+from page_object.elements.SearchElement import SearchElement
+from page_object.MainPage import MainPage
 
 
 def test_title(browser):
-    browser.get(browser.url)
-    wait = WebDriverWait(browser, 10)
-    el = wait.until(EC.visibility_of_element_located((By.ID, 'cart-total')))
-    assert '$0.00' in el.text
+    basket = BasketElement(browser)
+    basket.verify_basket_element()
+    assert '$0.00' in basket.get_basket_text(), 'Text message not equal to expected'
 
 
 def test_search_button(browser):
-    browser.get(browser.url)
-    search_field = browser.find_element_by_name('search')
-    search_field.send_keys('Test query')
-    browser.find_element_by_css_selector('.btn-default').click()
-    element = browser.find_element_by_css_selector('#content > h1')
-    assert 'Search - Test query' == element.text
+    search = SearchElement(browser)
+    search.submit_query_to_search('Test query')
+    search.verify_search_result()
+    text = search.get_search_result_text()
+    assert text == 'Search - Test query', 'Text message not equal to expected'
 
 
 def test_featured_title(browser):
-    browser.get(browser.url)
-    wait = WebDriverWait(browser, 10)
-    el = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#content > h3')))
-    assert el.text == 'Featured'
+    assert MainPage(browser).get_title_text() == 'Featured', 'Text message not equal to expected'
 
 
 def test_image_count(browser):
-    browser.get(browser.url)
-    el = browser.find_elements_by_css_selector('.image')
-    assert len(el) == 4
+    assert MainPage(browser).count_image_on_page() == 4
 
 
 def test_footer_element(browser):
-    browser.get(browser.url)
-    browser.find_element_by_xpath("//*[contains(text(), 'My Account')]")
+    FooterElement(browser).verify_footer_element()
