@@ -9,9 +9,9 @@ class CatalogPage(BasePage):
     CAPTION = (By.CSS_SELECTOR, '.caption')
     COMPARE = (By.ID, 'compare-total')
 
-    def __init__(self, browser):
-        super().__init__(browser)
-        self.browser.open('/smartphone')
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.open('/smartphone')
 
     def get_title_text(self):
         return self._get_element_text(self.TITLE)

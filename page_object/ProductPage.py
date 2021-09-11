@@ -10,9 +10,9 @@ class ProductPage(BasePage):
     SEARCH_BUTTON = (By.CSS_SELECTOR, '.btn-default')
     ALERT = (By.CSS_SELECTOR, '.alert-success')
 
-    def __init__(self, browser):
-        super().__init__(browser)
-        self.browser.open('/macbook')
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.open('/macbook')
 
     def verify_breadcrumb_element(self):
         return self._is_element_presence(self.BREADCRUMB)
@@ -32,4 +32,3 @@ class ProductPage(BasePage):
 
     def verify_description_element(self):
         return self._is_element_presence(self.DESCRIPTION)
-

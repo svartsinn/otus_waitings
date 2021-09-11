@@ -17,9 +17,9 @@ class AdminPage(BasePage):
     DATA_TAB = (By.XPATH, "//*[contains(text(), 'Data')]")
     ALL_PRODUCTS = (By.NAME, 'selected[]')
 
-    def __init__(self, browser):
-        super().__init__(browser)
-        self.browser.open('/admin')
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.open('/admin')
 
     def login(self):
         self._fill_input(self.LOGIN, 'admin')

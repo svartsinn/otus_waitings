@@ -13,9 +13,9 @@ class RegisterPage(BasePage):
     SUBMIT = (By.CSS_SELECTOR, '.btn-primary')
     SUCCESS_TEXT = (By.CSS_SELECTOR, '#content > h1')
 
-    def __init__(self, browser):
-        super().__init__(browser)
-        self.browser.open('/index.php?route=account/register')
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.open('/index.php?route=account/register')
 
     def fill_form(self, first_name, last_name, email, phone, password):
         self._fill_input(self.FIRST_NAME, first_name)

@@ -9,6 +9,10 @@ class PHPMyAdminPage(BasePage):
     DROPLIST = (By.CSS_SELECTOR, '.drop_list')
     DOCUMENTS = (By.ID, 'maincontainer')
 
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver.get('http://localhost:8888')
+
     def verify_panel_element(self):
         return self._is_element_presence(self.PANEL)
 
