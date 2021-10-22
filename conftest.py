@@ -11,7 +11,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser", default="chrome")
     parser.addoption("--bversion", default="92.0")
     parser.addoption("--executor", action="store", default="localhost")
-    parser.addoption("--url", action="store", default="http://localhost:8081")
+    parser.addoption("--url", action="store", default="https://demo.opencart.com")
     parser.addoption("--vnc", action="store_true", default=False)
     parser.addoption("--logs", action="store_true", default=False)
     parser.addoption("--videos", action="store_true", default=False)
@@ -32,7 +32,7 @@ def driver(request):
     logger = logging.getLogger("BrowserLogger")
     test_name = request.node.name
 
-    if executor == "localhost":
+    if executor == "127.0.0.1":
         caps = {'goog:chromeOptions': {}}
         wd = webdriver.Chrome(desired_capabilities=caps)
     else:
