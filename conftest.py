@@ -1,10 +1,14 @@
 import logging
 
 from faker import Faker
+import os
 import pytest
 from selenium import webdriver
 
-logging.basicConfig(level=logging.INFO, filename="logs/selenium.log")
+filename = 'logs/selenium.log'
+os.makedirs(os.path.dirname(filename), exist_ok=True)
+file_handler = logging.FileHandler(filename, mode="w", encoding=None, delay=False)
+logging.basicConfig(level=logging.INFO, filename=filename, force=True)
 
 
 def pytest_addoption(parser):
@@ -32,7 +36,7 @@ def driver(request):
     logger = logging.getLogger("BrowserLogger")
     test_name = request.node.name
 
-    if executor == "127.0.0.1":
+    if executor == "localhost":
         caps = {'goog:chromeOptions': {}}
         wd = webdriver.Chrome(desired_capabilities=caps)
     else:
