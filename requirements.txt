@@ -2,3 +2,4 @@ allure-pytest==2.8.40
 Faker==8.12.0
 pytest==6.2.4
 selenium==3.141.0
+pytest-xdist==2.4.0
