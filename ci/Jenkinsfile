@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    stages {
+
+            stage('Setup parameters') {
+                steps {
+                    script { 
+                        properties([
+                            parameters([
+                                string(
+                                    defaultValue: 'chrome', 
+                                    name: 'browser', 
+                                    trim: true
+                            ),
+                                string(
+                                    defaultValue: '95', 
+                                    name: 'browser_ver', 
+                                    trim: true
+                            ),
+                                string(
+                                    defaultValue: 'localhost', 
+                                    name: 'executor', 
+                                    trim: true
+                            ),
+                                string(
+                                    defaultValue: 'localhost', 
+                                    name: 'url', 
+                                    trim: true
+                            ),
+                            string(
+                                    defaultValue: '1', 
+                                    name: 'threads', 
+                                    trim: true
+                            ),
+                        ])
+                    ])
+                }
+            }
+        }
+
+        stage('test') {
+            steps {
+				sh """
+				    python3 -m venv venv
+				    . venv/bin/activate
+				    pip3 install -r tests/requirements.txt
+				    venv/bin/pytest --browser ${browser} --bversion ${browser_ver} --executor ${executor} --url ${url_opencart} --junitxml=report.xml -n ${threads} tests -v
+                """
+            }
+        }
+        stage('report-xml') {
+            steps {
+                junit 'report.xml'
+            }
+        }
+        stage('report-allure') {
+            steps {
+                script {
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+                }
+            }
+        }
+        stage('email') {
+           steps {
+                emailext body: '$DEFAULT_CONTENT',
+                         subject: '$DEFAULT_SUBJECT',
+                         to: 'alexost66@gmail.com'
+           }
+        }
+    }
+}
