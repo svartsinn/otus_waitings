@@ -27,7 +27,6 @@ def test_switch_currency_to_pound(driver):
     assert "£" in text, 'Text message not equal to expected'
 
 
-@pytest.mark.skip()
 @allure.title("Добавление нового продукта в каталог")
 def test_add_new_product_to_catalog(driver):
     """
@@ -44,7 +43,6 @@ def test_add_new_product_to_catalog(driver):
     assert 'Success: You have modified products!' in text, 'Text message not equal to expected'
 
 
-@pytest.mark.skip()
 @allure.title("Удаление продукта из каталога")
 def test_delete_product_from_catalog(driver):
     admin_page = AdminPage(driver)
